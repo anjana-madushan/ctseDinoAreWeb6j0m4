@@ -18,7 +18,7 @@
         gesture-detector
     >
         <a-assets>
-            <a-asset-item id="animated-asset" src="assets/asset.gltf"></a-asset-item>
+            <a-asset-item id="animated-asset" src="assets/scene.gltf"></a-asset-item>
         </a-assets>
 
         <a-marker id="initial-marker" type="pattern" url="assets/initial-marker.patt">
@@ -32,7 +32,13 @@
         </a-marker>
 
         <a-marker id="destination-marker" type="pattern" url="assets/destination-marker.patt">
-            <!-- Empty marker -->
+            <a-entity id="dinosaur" 
+                      gltf-model="#animated-asset" 
+                      animation-mixer="loop: repeat"
+                      scale="0.10645320581126387 0.10645320581126387 0.10645320581126387"
+                      position="0 0 0"
+                      gesture-handler
+                      ></a-entity>
         </a-marker>
 
         <script>
