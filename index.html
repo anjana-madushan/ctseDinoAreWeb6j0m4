@@ -1,64 +1,54 @@
 <!doctype html>
 <html>
+
 <head>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+  <script
+    src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+  <script
+    src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+  <script>
+    console.log("HTML loaded");
+    document.addEventListener('DOMContentLoaded', (event) => {
+      console.log("DOM fully loaded and parsed");
+    });
+  </script>
 </head>
+
 <body style="margin: 0; overflow: hidden;">
-    <a-scene
-        vr-mode-ui="enabled: false;"
-        loading-screen="enabled: false;"
-        renderer="logarithmicDepthBuffer: true;"
-        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-        id="scene"
-        embedded
-        gesture-detector
-    >
-        <a-assets>
-            <a-asset-item id="animated-asset" src="assets/asset.gltf"></a-asset-item>
-        </a-assets>
+  <a-scene vr-mode-ui="enabled: false;" loading-screen="enabled: false;" renderer="logarithmicDepthBuffer: true;"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;" id="scene" embedded gesture-detector>
+    <a-assets>
+      <a-asset-item id="animated-asset" src="assets/dinoModels/velociraptor/asset.gltf"></a-asset-item>
+    </a-assets>
 
-        <a-marker id="initial-marker" type="pattern" url="assets/initial-marker.patt">
-            <a-entity id="dinosaur" 
-                      gltf-model="#animated-asset" 
-                      animation-mixer="loop: repeat"
-                      scale="0.10645320581126387 0.10645320581126387 0.10645320581126387"
-                      position="0 0 0"
-                      gesture-handler
-                      ></a-entity>
-        </a-marker>
+    <a-marker id="animated-marker" type="pattern" preset="custom" url="assets/markers/velociraptor/marker.patt"
+      raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;" id="markerA">
+      <a-entity id="bowser-model" scale="6.023644641585786 6.023644641585786 6.023644641585786"
+        animation-mixer="loop: repeat" gltf-model="#animated-asset" class="clickable" gesture-handler></a-entity>
+    </a-marker>
 
-        <a-marker id="destination-marker" type="pattern" url="assets/destination-marker.patt">
-            <a-entity id="dinosaur" 
-                      gltf-model="#animated-asset" 
-                      animation-mixer="loop: repeat"
-                      scale="0.10645320581126387 0.10645320581126387 0.10645320581126387"
-                      position="0 0 0"
-                      gesture-handler
-                      ></a-entity>
-        </a-marker>
+    <script>
+      AFRAME.registerComponent('gesture-handler', {
+        init: function () {
+          const el = this.el;
+          el.addEventListener('markerFound', () => {
+            if (el.id === 'initial-marker') {
+              // Animation to walk to destination marker
+              el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 2; dur: 2000');
+            } else if (el.id === 'destination-marker') {
+              // Animation to return to initial marker
+              el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 0; dur: 2000');
+            }
+          });
+        }
+      });
+    </script>
 
-        <script>
-            AFRAME.registerComponent('gesture-handler', {
-                init: function () {
-                    const el = this.el;
-                    el.addEventListener('markerFound', () => {
-                        if (el.id === 'initial-marker') {
-                            // Animation to walk to destination marker
-                            el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 2; dur: 2000');
-                        } else if (el.id === 'destination-marker') {
-                            // Animation to return to initial marker
-                            el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 0; dur: 2000');
-                        }
-                    });
-                }
-            });
-        </script>
-
-        <a-entity camera></a-entity>
-    </a-scene>
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
+
 </html>
