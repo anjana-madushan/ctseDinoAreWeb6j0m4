@@ -30,23 +30,6 @@
         animation-mixer="loop: repeat" gltf-model="#animated-asset" class="clickable" gesture-handler></a-entity>
     </a-marker>
 
-    <script>
-      AFRAME.registerComponent('gesture-handler', {
-        init: function () {
-          const el = this.el;
-          el.addEventListener('markerFound', () => {
-            if (el.id === 'initial-marker') {
-              // Animation to walk to destination marker
-              el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 2; dur: 2000');
-            } else if (el.id === 'destination-marker') {
-              // Animation to return to initial marker
-              el.querySelector('#dinosaur').setAttribute('animation', 'property: position; to: 0 0 0; dur: 2000');
-            }
-          });
-        }
-      });
-    </script>
-
     <a-entity camera></a-entity>
   </a-scene>
 </body>
